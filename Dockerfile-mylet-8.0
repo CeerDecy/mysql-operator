@@ -17,9 +17,8 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
   echo Asia/Shanghai > /etc/timezone
 
 RUN set -eux; \
-    echo "deb http://mirrors.aliyun.com/debian bookworm main contrib non-free non-free-firmware" > /etc/apt/sources.list; \
-    echo "deb http://mirrors.aliyun.com/debian bookworm-updates main contrib non-free non-free-firmware" >> /etc/apt/sources.list; \
-    echo "deb http://mirrors.aliyun.com/debian-security bookworm-security main contrib non-free non-free-firmware" >> /etc/apt/sources.list; \
+    touch /etc/apt/sources.list &&\
+    sed -i 's/deb.debian.org/mirrors.aliyun.com/g;s/security.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list && \
     apt-get update; \
     apt-get install -y --no-install-recommends \
         curl \
