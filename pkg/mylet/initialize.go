@@ -74,6 +74,8 @@ func (mylet *Mylet) FetchAndPrepare() error {
 	q.Set("datetime", "replication")
 	u.RawQuery = q.Encode()
 
+	log.Infof("fetch backup %s", u.String())
+
 	req, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
 		return err
@@ -88,6 +90,8 @@ func (mylet *Mylet) FetchAndPrepare() error {
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(res.Body)
+		log.Error("fetch backup failed, body: ", string(body))
 		return fmt.Errorf("status code %d", res.StatusCode)
 	}
 
